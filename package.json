@@ -1,0 +1,11 @@
+{
+  "name": "thealoq-voicealtyapi",
+  "version": "1.0.0",
+  "main": "./src/thealoq.js",
+  "license": "MIT",
+  "author": "thealoq",
+  "dependencies": {
+    "discord.js": "^13.6.0",
+    "mongoose": "^6.1.8"
+  }
+}
