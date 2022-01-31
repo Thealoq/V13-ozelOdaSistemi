@@ -31,7 +31,7 @@ client.on("messageCreate", async (message) => {
             if (b.customId === "TwoSize") {
                 await message.guild.channels.create(`🔈${message.member.user.username} Odasi`, {
                     type: "GUILD_VOICE",
-                    parent: "937444236087926794",
+                    parent: config.kategori,
                     userLimit: "2",
                     permissionOverwrites: [
                         {
@@ -51,7 +51,7 @@ client.on("messageCreate", async (message) => {
             if (b.customId === "FourSize") {
                 await message.guild.channels.create(`🔈${message.member.user.username} Odasi`, {
                     type: "GUILD_VOICE",
-                    parent: "937444236087926794",
+                    parent: config.kategori,
                     userLimit: "4",
 
                     permissionOverwrites: [
@@ -72,7 +72,7 @@ client.on("messageCreate", async (message) => {
             if (b.customId === "SixSize") {
                 await message.guild.channels.create(`🔈${message.member.user.username} Odasi`, {
                     type: "GUILD_VOICE",
-                    parent: "937444236087926794",
+                    parent: config.kategori,
                     userLimit: "6",
 
                     permissionOverwrites: [
