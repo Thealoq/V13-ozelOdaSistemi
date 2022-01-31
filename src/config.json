@@ -2,5 +2,6 @@
     "token": "token",
     "footer": "Mega 💖 Thealoq",
     "footer2": "Thealoq 💗 Mega",
-    "url": "mongodb://localhost/thealoq"
+    "url": "mongodb://localhost/thealoq",
+    "kategori": "kategori id"
 }
