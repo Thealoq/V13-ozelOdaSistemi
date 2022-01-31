@@ -112,11 +112,5 @@ client.on("messageCreate", async (message) => {
            message.reply({ content: "Lütfen Kaç Kişilik Olucağini Seçin", components: [row] })
             
         }
-
-
-      
-
-
     }
-
 })
