@@ -17,6 +17,6 @@
 
 - Node.js İndirin
 
-- Cmd "Yarn" Yazarak Mödüleri İndirebilirsiniz.
+- Cmd "Yarn" Yazarak Modüleri İndirebilirsiniz.
 
   
