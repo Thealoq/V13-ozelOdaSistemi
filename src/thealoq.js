@@ -3,7 +3,6 @@ const client = new Client({ intents: Object.values(Intents.FLAGS).reduce((p, c) 
 const config = require("./config.json")
 const mongoose = require("mongoose");
 const Data = require("./models/channel")
-
 client.on('ready', async () => {
     client.user.setPresence({ activities: [{ name: config.footer }, { name: config.footer2 }], status: 'idle' });
 });
@@ -16,79 +15,44 @@ mongoose.connect(config.url, {
 client.login(config.token).then(e => console.log(`${client.user.username} Bağlandı`)).catch(e => console.error(e));
 
 client.on("messageCreate", async (message) => {
+    async function channelCreate (limit) {
+        await message.guild.channels.create(`🔈${message.member.user.username} Odasi`, {
+            type: "GUILD_VOICE",
+            parent: config.kategori,
+            userLimit: limit,
+            permissionOverwrites: [
+                {
+                    id: message.member.id,
+                    allow: ['VIEW_CHANNEL']
+                },
+            ],
+        }).then(msg => {
+            new Data({
+                GuildId: message.guild.id,
+                UserId: message.member.id,
+                ChannelId: msg.id
+            }).save()
+            message.channel.send({ content: 'Başariyla Odaniz Oluştu!', ephemeral: true })
+        });
+    } 
     const filter = i => i.user.id === message.member.id;
     const collector = message.channel.createMessageComponentCollector({ filter, time: 60000, userLimit: 1 });
     collector.on('collect', async b => {
         if (b.isButton()) {
              if(b.customId === "Delete") {
                 let ChannlData = await Data.findOne({ GuildId: message.guild.id, UserId: message.member.id })
-                message.guild.channels.cache.get(ChannlData.ChannelId).delete().then(msg => 
-                    msg.reply("Başariyla Silindi")
-                ).catch(e => { console.error({ }) })
+                message.guild.channels.cache.get(ChannlData.ChannelId).delete().catch(e => { console.error({ }) })
+                message.channel.send("Başariyla Odaniz Silindi"+ " " +`${message.member}`)
                 await Data.deleteOne({ GuildId: message.guild.id, UserId: message.member.id })
             }
-
             if (b.customId === "TwoSize") {
-                await message.guild.channels.create(`🔈${message.member.user.username} Odasi`, {
-                    type: "GUILD_VOICE",
-                    parent: config.kategori,
-                    userLimit: "2",
-                    permissionOverwrites: [
-                        {
-                            id: message.member.id,
-                            allow: ['VIEW_CHANNEL']
-                        },
-                    ],
-                }).then(msg => {
-                    new Data({
-                        GuildId: message.guild.id,
-                        UserId: message.member.id,
-                        ChannelId: msg.id
-                    }).save()
-                    message.channel.send({ content: 'Başariyla Odaniz Oluştu!', ephemeral: true })
-                });
+                channelCreate(2)
             }
             if (b.customId === "FourSize") {
-                await message.guild.channels.create(`🔈${message.member.user.username} Odasi`, {
-                    type: "GUILD_VOICE",
-                    parent: config.kategori,
-                    userLimit: "4",
-
-                    permissionOverwrites: [
-                        {
-                            id: message.member.id,
-                            allow: ['VIEW_CHANNEL', 'SEND_MESSAGES']
-                        },
-                    ],
-                }).then(msg => {
-                    new Data({
-                        GuildId: message.guild.id,
-                        UserId: message.member.id,
-                        ChannelId: msg.id
-                    }).save()
-                    message.channel.send({ content: 'Başariyla Odaniz Oluştu!', ephemeral: true })
-                });
+                channelCreate(4)
             }
             if (b.customId === "SixSize") {
-                await message.guild.channels.create(`🔈${message.member.user.username} Odasi`, {
-                    type: "GUILD_VOICE",
-                    parent: config.kategori,
-                    userLimit: "6",
-
-                    permissionOverwrites: [
-                        {
-                            id: message.member.id,
-                            allow: ['VIEW_CHANNEL', 'SEND_MESSAGES']
-                        },
-                    ],
-                }).then(msg => {
-                    new Data({
-                        GuildId: message.guild.id,
-                        UserId: message.member.id,
-                        ChannelId: msg.id
-                    }).save()
-                    message.channel.send({ content: 'Başariyla Odaniz Oluştu!', ephemeral: true })
-                });
+                channelCreate(4)
             }
             if (b.customId === "iptal") {
                 message.delete();
@@ -115,7 +79,7 @@ client.on("messageCreate", async (message) => {
                 .setLabel("İptal")
                 .setStyle('DANGER'))
     if (message.author.bot) return
-    if (message.content.toLowerCase() == "!Oda") {
+    if (message.content.toLowerCase() == "!oda") {
         let ChannlData = await Data.findOne({ GuildId: message.guild.id, UserId: message.member.id })
         if (ChannlData) {
             return message.reply({ content: "Zaten Odaniz Bulunyor", components: [row] })
